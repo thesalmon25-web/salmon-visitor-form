@@ -6,10 +6,13 @@ import os
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
+# Language selection
 lang = st.selectbox("Choose Language / Velg språk", ["English", "Norsk"])
 
+# Country list
 countries = sorted([country.name for country in pycountry.countries])
 
+# Language dictionary
 translations = {
     "English": {
         "title": "🧭 Welcome to The Salmon Knowledge Centre in Oslo!",
@@ -65,6 +68,7 @@ translations = {
     }
 }
 
+# Use the selected language
 t = translations[lang]
 
 st.title(t["title"])
@@ -83,8 +87,15 @@ if not st.session_state.form_submitted:
         satisfaction = st.radio(t["satisfaction"], ["1", "2", "3", "4", "5"])
         staff = st.radio(t["staff"], ["1", "2", "3", "4", "5"])
         cleanliness = st.radio(t["cleanliness"], ["1", "2", "3", "4", "5"])
-        purchase_factors = st.multiselect(t["purchase_factors"], t["purchase_options"])
-        association = st.multiselect(t["association"], t["association_options"])
+
+        for option in t["purchase_options"]:
+            st.checkbox(option, key=f"purchase_{option}")
+        purchase_factors = [option for option in t["purchase_options"] if st.session_state.get(f"purchase_{option}")]
+
+        for option in t["association_options"]:
+            st.checkbox(option, key=f"assoc_{option}")
+        association = [option for option in t["association_options"] if st.session_state.get(f"assoc_{option}")]
+
         improvement = st.text_area(t["improvement"], max_chars=600)
 
         submit = st.form_submit_button(t["submit"])
