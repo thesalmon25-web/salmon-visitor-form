@@ -2,11 +2,11 @@ import streamlit as st
 import pycountry
 import pandas as pd
 from datetime import datetime
+import os
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
 lang = st.selectbox("Choose Language / Velg språk", ["English", "Norsk"])
-
 
 translations = {
     "English": {
@@ -51,7 +51,6 @@ translations = {
     }
 }
 
-
 t = translations[lang]
 countries = sorted([country.name for country in pycountry.countries])
 
@@ -79,28 +78,36 @@ if not st.session_state.form_submitted:
         submit = st.form_submit_button(t["submit"])
 
         if submit:
+            now = datetime.now()
+            date_str = now.strftime("%Y-%m-%d")
+            time_str = now.strftime("%H:%M:%S")
+
             if lang == "English":
                 response = {
-                    "timestamp": datetime.now().isoformat(),
-                    "country": country,
-                    "info_source": info_source,
-                    "group_size": group_size,
-                    "tasted_salmon": tasted_salmon,
-                    "can_buy": can_buy,
-                    "first_time": first_time,
-                    "language": lang
+                    "Date": date_str,
+                    "Time": time_str,
+                    "Q1_Country": country,
+                    "Q2_InfoSource": info_source,
+                    "Q3_GroupSize": group_size,
+                    "Q4_TastedSalmon": tasted_salmon,
+                    "Q5_CanBuy": can_buy,
+                    "Q6_FirstTime": first_time,
+                    "Language": lang
                 }
             else:
                 response = {
-                    "timestamp": datetime.now().isoformat(),
-                    "farm_visited": farm_visited,
-                    "eat_regularly": eat_regularly,
-                    "association": association,
-                    "purchase_factor": purchase_factor,
-                    "language": lang
+                    "Date": date_str,
+                    "Time": time_str,
+                    "Q1_FarmVisited": farm_visited,
+                    "Q2_EatRegularly": eat_regularly,
+                    "Q3_Association": association,
+                    "Q4_PurchaseFactor": purchase_factor,
+                    "Language": lang
                 }
+
             df = pd.DataFrame([response])
-            df.to_csv("visitor_data.csv", mode='a', header=False, index=False)
+            file_exists = os.path.isfile("visitor_data.csv")
+            df.to_csv("visitor_data.csv", mode='a', header=not file_exists, index=False)
 
             st.session_state.form_submitted = True
             st.rerun()
