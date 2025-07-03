@@ -45,7 +45,7 @@ translations = {
         "no": "Nei",
         "submit": "Send inn",
         "thanks": "✅ Takk for ditt svar!",
-        "welcome": "### 🎉 Velkommen til Laksesenteret!",
+        "welcome": "### 🎉 Velkommen til The Salmon Kunnskapssenteret!",
         "enjoy": "Vi gleder oss til å ta deg med på en guidet tur i senteret. Nyt opplevelsen!",
         "refresh": "🔄 Et nytt skjema vises om 5 sekunder..."
     }
