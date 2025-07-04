@@ -8,13 +8,16 @@ import base64
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
-# Blue background and white text styling
+# Apply blue background and white text, plus image border
 st.markdown(
     """
     <style>
     body, .stApp {
         background-color: #003366;
         color: white;
+    }
+    .css-1v3fvcr, .css-ffhzg2, .css-1c7y2kd {
+        color: white !important;
     }
     label, .stRadio > div, .stSelectbox > div, .stMultiSelect > div, textarea, input {
         color: white !important;
@@ -104,17 +107,14 @@ translations = {
     }
 }
 
-# === State Tracking ===
 if "form_submitted" not in st.session_state:
     st.session_state.form_submitted = False
 
-# === Form Page ===
 if not st.session_state.form_submitted:
     lang = st.selectbox("Choose Language / Velg språk", ["English", "Norsk"])
     st.session_state.lang = lang
     t = translations[lang]
 
-    # Header with logo
     st.markdown(f"""
     <div style='display: flex; align-items: center; justify-content: space-between;'>
         <h1 style='flex: 1;'>{t['title']}</h1>
@@ -126,14 +126,14 @@ if not st.session_state.form_submitted:
 
     with st.form("visitor_form"):
         country = st.selectbox(t["country"], countries)
-        info_source = st.radio(t["info_source"], t["info_options"], key="info")
-        gender = st.radio(t["gender"], t["gender_options"], key="gender")
-        age = st.radio(t["age"], t["age_options"], key="age")
-        enjoyed = st.radio(t["enjoyed"], t["enjoyed_options"], key="enjoyed")
+        info_source = st.radio(t["info_source"], t["info_options"], key="info", index=None)
+        gender = st.radio(t["gender"], t["gender_options"], key="gender", index=None)
+        age = st.radio(t["age"], t["age_options"], key="age", index=None)
+        enjoyed = st.radio(t["enjoyed"], t["enjoyed_options"], key="enjoyed", index=None)
 
-        satisfaction = st.radio(t["satisfaction"], ["5", "4", "3", "2", "1"], horizontal=True, key="satisfaction")
-        staff = st.radio(t["staff"], ["5", "4", "3", "2", "1"], horizontal=True, key="staff")
-        cleanliness = st.radio(t["cleanliness"], ["5", "4", "3", "2", "1"], horizontal=True, key="cleanliness")
+        satisfaction = st.radio(t["satisfaction"], ["5", "4", "3", "2", "1"], horizontal=True, key="satisfaction", index=None)
+        staff = st.radio(t["staff"], ["5", "4", "3", "2", "1"], horizontal=True, key="staff", index=None)
+        cleanliness = st.radio(t["cleanliness"], ["5", "4", "3", "2", "1"], horizontal=True, key="cleanliness", index=None)
 
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"**{t['purchase_factors']}**")
@@ -149,9 +149,12 @@ if not st.session_state.form_submitted:
 
         if submit:
             now = datetime.now()
+            date_str = now.strftime("%Y-%m-%d")
+            time_str = now.strftime("%H:%M:%S")
+
             response = {
-                "date": now.strftime("%Y-%m-%d"),
-                "time": now.strftime("%H:%M:%S"),
+                "date": date_str,
+                "time": time_str,
                 "lang": lang,
                 "country": country,
                 "info_source": info_source,
@@ -167,17 +170,18 @@ if not st.session_state.form_submitted:
             }
 
             file_exists = os.path.isfile("visitor_data.csv")
-            pd.DataFrame([response]).to_csv("visitor_data.csv", mode="a", header=not file_exists, index=False)
+            df = pd.DataFrame([response])
+            df.to_csv("visitor_data.csv", mode='a', header=not file_exists, index=False)
 
             st.session_state.form_submitted = True
             st.rerun()
-
-# === Thank You Page ===
 else:
     t = translations.get(st.session_state.get("lang", "English"), translations["English"])
     st.markdown(f"# {t['thanks']}")
     st.markdown(f"### {t['welcome']}")
     st.markdown(f"### {t['enjoy']}")
-    if logo:
-        st.image(logo, width=120)
-    st.markdown("<meta http-equiv='refresh' content='5'>", unsafe_allow_html=True)
+    if logo_base64:
+        st.markdown(f"<img src='data:image/png;base64,{logo_base64}' width='120'/>", unsafe_allow_html=True)
+    st.markdown("""
+        <meta http-equiv="refresh" content="5">
+    """, unsafe_allow_html=True)
