@@ -33,12 +33,19 @@ st.markdown(
 )
 
 # Load logo and encode to base64
-logo_path = "logo.png"
+logo_path = os.path.join("static", "logo.png")
 def get_base64_logo(path):
-    with open(path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode()
+    try:
+        with open(path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except FileNotFoundError:
+        return ""
 
-logo = Image.open(logo_path)
+try:
+    logo = Image.open(logo_path)
+except:
+    logo = None
+
 logo_base64 = get_base64_logo(logo_path)
 
 # Country list
@@ -175,7 +182,8 @@ else:
     st.markdown(f"# {t['thanks']}")
     st.markdown(f"### {t['welcome']}")
     st.markdown(f"### {t['enjoy']}")
-    st.image(logo, width=120)
+    if logo:
+        st.image(logo, width=120)
     st.markdown("""
         <meta http-equiv="refresh" content="5">
     """, unsafe_allow_html=True)
