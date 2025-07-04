@@ -8,16 +8,13 @@ import base64
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
-# Apply blue background and white text, plus image border
+# Blue background and white text styling
 st.markdown(
     """
     <style>
     body, .stApp {
         background-color: #003366;
         color: white;
-    }
-    .css-1v3fvcr, .css-ffhzg2, .css-1c7y2kd {
-        color: white !important;
     }
     label, .stRadio > div, .stSelectbox > div, .stMultiSelect > div, textarea, input {
         color: white !important;
@@ -32,8 +29,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Load logo and encode to base64
-logo_path = os.path.join("static", "logo.png")
+# === Logo Setup ===
+logo_path = "logo.png"  # Ensure this file exists in the same folder
 def get_base64_logo(path):
     try:
         with open(path, "rb") as img_file:
@@ -48,10 +45,10 @@ except:
 
 logo_base64 = get_base64_logo(logo_path)
 
-# Country list
+# === Country list ===
 countries = sorted([country.name for country in pycountry.countries])
 
-# Language dictionary
+# === Language Translations ===
 translations = {
     "English": {
         "title": "🧭 Welcome to The Salmon Knowledge Centre in Oslo!",
@@ -107,16 +104,17 @@ translations = {
     }
 }
 
-# Session flag
+# === State Tracking ===
 if "form_submitted" not in st.session_state:
     st.session_state.form_submitted = False
 
+# === Form Page ===
 if not st.session_state.form_submitted:
     lang = st.selectbox("Choose Language / Velg språk", ["English", "Norsk"])
     st.session_state.lang = lang
     t = translations[lang]
 
-    # Header with logo on the right side
+    # Header with logo
     st.markdown(f"""
     <div style='display: flex; align-items: center; justify-content: space-between;'>
         <h1 style='flex: 1;'>{t['title']}</h1>
@@ -151,12 +149,9 @@ if not st.session_state.form_submitted:
 
         if submit:
             now = datetime.now()
-            date_str = now.strftime("%Y-%m-%d")
-            time_str = now.strftime("%H:%M:%S")
-
             response = {
-                "date": date_str,
-                "time": time_str,
+                "date": now.strftime("%Y-%m-%d"),
+                "time": now.strftime("%H:%M:%S"),
                 "lang": lang,
                 "country": country,
                 "info_source": info_source,
@@ -172,11 +167,12 @@ if not st.session_state.form_submitted:
             }
 
             file_exists = os.path.isfile("visitor_data.csv")
-            df = pd.DataFrame([response])
-            df.to_csv("visitor_data.csv", mode='a', header=not file_exists, index=False)
+            pd.DataFrame([response]).to_csv("visitor_data.csv", mode="a", header=not file_exists, index=False)
 
             st.session_state.form_submitted = True
             st.rerun()
+
+# === Thank You Page ===
 else:
     t = translations.get(st.session_state.get("lang", "English"), translations["English"])
     st.markdown(f"# {t['thanks']}")
@@ -184,6 +180,4 @@ else:
     st.markdown(f"### {t['enjoy']}")
     if logo:
         st.image(logo, width=120)
-    st.markdown("""
-        <meta http-equiv="refresh" content="5">
-    """, unsafe_allow_html=True)
+    st.markdown("<meta http-equiv='refresh' content='5'>", unsafe_allow_html=True)
