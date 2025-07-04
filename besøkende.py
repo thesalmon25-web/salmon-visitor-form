@@ -6,6 +6,25 @@ import os
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
+# Apply blue background and white text
+st.markdown(
+    """
+    <style>
+    body, .stApp {
+        background-color: #003366;
+        color: white;
+    }
+    .css-1v3fvcr, .css-ffhzg2, .css-1c7y2kd {
+        color: white !important;
+    }
+    label, .stRadio > div, .stSelectbox > div, .stMultiSelect > div, textarea, input {
+        color: white !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Language selection
 lang = st.selectbox("Choose Language / Velg språk", ["English", "Norsk"])
 
@@ -36,8 +55,8 @@ translations = {
         "improvement": "What could we improve to enhance your museum experience? (Optional, max 100 words)",
         "submit": "Submit",
         "thanks": "✅ Thank you for your response!",
-        "welcome": "### 🎉 Welcome to The Salmon Knowledge Centre!",
-        "enjoy": "We’re excited to take you on a guided tour of this center. Enjoy your experience!",
+        "welcome": "### Thank you for visiting The Salmon Knowledge Centre!",
+        "enjoy": "Have a good time ahead!",
         "refresh": "🔄 A new form will appear in 5 seconds..."
     },
     "Norsk": {
@@ -62,8 +81,8 @@ translations = {
         "improvement": "Hva kan vi forbedre for å gjøre museumsopplevelsen bedre? (Valgfritt, maks 100 ord)",
         "submit": "Send inn",
         "thanks": "✅ Takk for ditt svar!",
-        "welcome": "### 🎉 Velkommen til The Salmon Kunnskapssenter!",
-        "enjoy": "Vi gleder oss til å ta deg med på en guidet tur i senteret. Nyt opplevelsen!",
+        "welcome": "### 🎉 Takk for at du besøkte The Salmon Kunnskapssenter! ",
+        "enjoy": "Ha en god tid videre!",
         "refresh": "🔄 Et nytt skjema vises om 5 sekunder..."
     }
 }
@@ -80,21 +99,22 @@ if "form_submitted" not in st.session_state:
 if not st.session_state.form_submitted:
     with st.form("visitor_form"):
         country = st.selectbox(t["country"], countries)
-        info_source = st.radio(t["info_source"], t["info_options"])
-        gender = st.radio(t["gender"], t["gender_options"])
-        age = st.radio(t["age"], t["age_options"])
-        enjoyed = st.radio(t["enjoyed"], t["enjoyed_options"])
-        satisfaction = st.radio(t["satisfaction"], ["1", "2", "3", "4", "5"])
-        staff = st.radio(t["staff"], ["1", "2", "3", "4", "5"])
-        cleanliness = st.radio(t["cleanliness"], ["1", "2", "3", "4", "5"])
+        info_source = st.radio(t["info_source"], t["info_options"], key="info")
+        gender = st.radio(t["gender"], t["gender_options"], key="gender")
+        age = st.radio(t["age"], t["age_options"], key="age")
+        enjoyed = st.radio(t["enjoyed"], t["enjoyed_options"], key="enjoyed")
 
-        for option in t["purchase_options"]:
-            st.checkbox(option, key=f"purchase_{option}")
-        purchase_factors = [option for option in t["purchase_options"] if st.session_state.get(f"purchase_{option}")]
+        satisfaction = st.radio(t["satisfaction"], ["5", "4", "3", "2", "1"], horizontal=True, key="satisfaction")
+        staff = st.radio(t["staff"], ["5", "4", "3", "2", "1"], horizontal=True, key="staff")
+        cleanliness = st.radio(t["cleanliness"], ["5", "4", "3", "2", "1"], horizontal=True, key="cleanliness")
 
-        for option in t["association_options"]:
-            st.checkbox(option, key=f"assoc_{option}")
-        association = [option for option in t["association_options"] if st.session_state.get(f"assoc_{option}")]
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown(f"**{t['purchase_factors']}**")
+        purchase_factors = [option for option in t["purchase_options"] if st.checkbox(option, key=f"purchase_{option}")]
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown(f"**{t['association']}**")
+        association = [option for option in t["association_options"] if st.checkbox(option, key=f"assoc_{option}")]
 
         improvement = st.text_area(t["improvement"], max_chars=600)
 
@@ -133,8 +153,6 @@ if st.session_state.form_submitted:
     st.success(t["thanks"])
     st.markdown(t["welcome"])
     st.markdown(t["enjoy"])
-
-    st.info(t["refresh"])
 
     st.markdown("""
         <meta http-equiv="refresh" content="5">
