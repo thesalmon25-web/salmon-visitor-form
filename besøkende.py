@@ -54,10 +54,10 @@ translations = {
         "association_options": ["Health and nutrition", "Export and production", "Environment and sustainability", "Nothing special"],
         "improvement": "What could we improve to enhance your museum experience? (Optional, max 100 words)",
         "submit": "Submit",
-        "thanks": "✅ Thank you for your response!",
-        "welcome": "### Thank you for visiting The Salmon Knowledge Centre!",
+        "thanks": "Thank you for your response!",
+        "welcome": "Thank you for visiting The Salmon Knowledge Centre!",
         "enjoy": "Have a good time ahead!",
-        "refresh": "🔄 A new form will appear in 5 seconds..."
+        "refresh": ""
     },
     "Norsk": {
         "title": "🧭 Velkommen til The Salmon Kunnskapssenter i Oslo!",
@@ -80,23 +80,23 @@ translations = {
         "association_options": ["Helse og ernæring", "Eksport og produksjon", "Miljø og bærekraft", "Ingenting spesielt"],
         "improvement": "Hva kan vi forbedre for å gjøre museumsopplevelsen bedre? (Valgfritt, maks 100 ord)",
         "submit": "Send inn",
-        "thanks": "✅ Takk for ditt svar!",
-        "welcome": "### 🎉 Takk for at du besøkte The Salmon Kunnskapssenter! ",
+        "thanks": "Takk for ditt svar!",
+        "welcome": "Takk for at du besøkte The Salmon Kunnskapssenter!",
         "enjoy": "Ha en god tid videre!",
-        "refresh": "🔄 Et nytt skjema vises om 5 sekunder..."
+        "refresh": ""
     }
 }
 
 # Use the selected language
 t = translations[lang]
 
-st.title(t["title"])
-st.subheader(t["subheader"])
-
 if "form_submitted" not in st.session_state:
     st.session_state.form_submitted = False
 
 if not st.session_state.form_submitted:
+    st.title(t["title"])
+    st.subheader(t["subheader"])
+
     with st.form("visitor_form"):
         country = st.selectbox(t["country"], countries)
         info_source = st.radio(t["info_source"], t["info_options"], key="info")
@@ -150,9 +150,9 @@ if not st.session_state.form_submitted:
             st.rerun()
 
 if st.session_state.form_submitted:
-    st.success(t["thanks"])
-    st.markdown(t["welcome"])
-    st.markdown(t["enjoy"])
+    st.markdown(f"# {t['thanks']}")
+    st.markdown(f"### {t['welcome']}")
+    st.markdown(f"### {t['enjoy']}")
 
     st.markdown("""
         <meta http-equiv="refresh" content="5">
