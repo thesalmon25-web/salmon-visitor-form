@@ -3,32 +3,65 @@ import pycountry
 import pandas as pd
 from datetime import datetime
 import os
+from PIL import Image
+import base64
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
-# Apply blue background and white text
+# Improved CSS for mobile visibility and answer option coloring
 st.markdown(
     """
-    <style>
-    body, .stApp {
-        background-color: #003366;
-        color: white;
-    }
-    .css-1v3fvcr, .css-ffhzg2, .css-1c7y2kd {
-        color: white !important;
-    }
-    label, .stRadio > div, .stSelectbox > div, .stMultiSelect > div, textarea, input {
-        color: white !important;
-    }
-    </style>
+   <style>
+body, .stApp {
+    background-color: #003366;
+    color: white;
+}
+
+/* Question label text */
+label, .stRadio label, .stCheckbox label, .stSelectbox label, .stMultiSelect label,
+textarea, input, span {
+    color: white !important;
+    font-weight: 500 !important;
+}
+
+/* Enforce white text for all option labels (radio + checkbox), even on mobile */
+div[data-baseweb="radio"] label span,
+div[data-baseweb="checkbox"] label span,
+div[data-baseweb="radio"] div span,
+div[data-baseweb="checkbox"] div span {
+    color: white !important;
+    font-weight: 500 !important;
+}
+
+/* Optional: border enhancement on images */
+img {
+    border: 2px solid white;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.4);
+}
+</style>
+
     """,
     unsafe_allow_html=True
 )
 
-# Country list
+# === Logo Setup ===
+logo_path = "logo.png"
+def get_base64_logo(path):
+    try:
+        with open(path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except FileNotFoundError:
+        return ""
+
+try:
+    logo = Image.open(logo_path)
+except:
+    logo = None
+
+logo_base64 = get_base64_logo(logo_path)
 countries = sorted([country.name for country in pycountry.countries])
 
-# Language dictionary
 translations = {
     "English": {
         "title": "🧭 Welcome to The Salmon Knowledge Centre in Oslo!",
@@ -84,28 +117,33 @@ translations = {
     }
 }
 
-# Session flag
 if "form_submitted" not in st.session_state:
     st.session_state.form_submitted = False
 
 if not st.session_state.form_submitted:
-    # Language selection only shown before form submission
     lang = st.selectbox("Choose Language / Velg språk", ["English", "Norsk"])
+    st.session_state.lang = lang
     t = translations[lang]
 
-    st.title(t["title"])
+    st.markdown(f"""
+    <div style='display: flex; align-items: center; justify-content: space-between;'>
+        <h1 style='flex: 1;'>{t['title']}</h1>
+        <img src='data:image/png;base64,{logo_base64}' width='90' style='margin-left: 10px;'/>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.subheader(t["subheader"])
 
     with st.form("visitor_form"):
         country = st.selectbox(t["country"], countries)
-        info_source = st.radio(t["info_source"], t["info_options"], key="info")
-        gender = st.radio(t["gender"], t["gender_options"], key="gender")
-        age = st.radio(t["age"], t["age_options"], key="age")
-        enjoyed = st.radio(t["enjoyed"], t["enjoyed_options"], key="enjoyed")
+        info_source = st.radio(t["info_source"], t["info_options"], key="info", index=None)
+        gender = st.radio(t["gender"], t["gender_options"], key="gender", index=None)
+        age = st.radio(t["age"], t["age_options"], key="age", index=None)
+        enjoyed = st.radio(t["enjoyed"], t["enjoyed_options"], key="enjoyed", index=None)
 
-        satisfaction = st.radio(t["satisfaction"], ["5", "4", "3", "2", "1"], horizontal=True, key="satisfaction")
-        staff = st.radio(t["staff"], ["5", "4", "3", "2", "1"], horizontal=True, key="staff")
-        cleanliness = st.radio(t["cleanliness"], ["5", "4", "3", "2", "1"], horizontal=True, key="cleanliness")
+        satisfaction = st.radio(t["satisfaction"], ["5", "4", "3", "2", "1"], horizontal=True, key="satisfaction", index=None)
+        staff = st.radio(t["staff"], ["5", "4", "3", "2", "1"], horizontal=True, key="staff", index=None)
+        cleanliness = st.radio(t["cleanliness"], ["5", "4", "3", "2", "1"], horizontal=True, key="cleanliness", index=None)
 
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"**{t['purchase_factors']}**")
@@ -148,12 +186,10 @@ if not st.session_state.form_submitted:
             st.session_state.form_submitted = True
             st.rerun()
 else:
-    # Display thank-you messages only
     t = translations.get(st.session_state.get("lang", "English"), translations["English"])
     st.markdown(f"# {t['thanks']}")
     st.markdown(f"### {t['welcome']}")
     st.markdown(f"### {t['enjoy']}")
-
-    st.markdown("""
-        <meta http-equiv="refresh" content="5">
-    """, unsafe_allow_html=True)
+    if logo_base64:
+        st.markdown(f"<img src='data:image/png;base64,{logo_base64}' width='120'/>", unsafe_allow_html=True)
+    st.markdown(f"<meta http-equiv='refresh' content='5'>", unsafe_allow_html=True)
