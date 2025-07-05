@@ -17,21 +17,18 @@ st.markdown(
         color: white;
     }
 
-    /* Force all labels to be white and larger on all devices */
-    label, .stRadio label, .stCheckbox label, .st-bb, .st-c3, .st-co {
-        color: white !important;
-        font-size: 16px !important;
-        font-weight: 500;
-    }
-
-    /* Inputs */
-    .stSelectbox > div, .stMultiSelect > div, textarea, input {
+    /* Ensure all widget text remains visible */
+    .stRadio label, .stSelectbox label, .stTextArea label, .stTextInput label {
         color: white !important;
     }
 
-    /* Ensure input placeholder text is white too */
-    input::placeholder, textarea::placeholder {
-        color: #e0e0e0 !important;
+    .css-1c7y2kd, .css-1v3fvcr, .css-ffhzg2 {
+        color: white !important;
+    }
+
+    /* Maintain visibility across all devices */
+    div[data-baseweb="radio"] label span, div[data-baseweb="checkbox"] label span {
+        color: white !important;
     }
 
     img {
@@ -43,6 +40,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 # === Logo Setup ===
 logo_path = "logo.png"  # Ensure this file exists in the same folder
