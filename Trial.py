@@ -9,41 +9,41 @@ import base64
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
 # Improved CSS for mobile visibility and answer option coloring
-st.markdown(
-    """
-   <style>
+st.markdown("""
+<style>
 body, .stApp {
     background-color: #003366;
     color: white;
 }
 
-/* Question label text */
-label, .stRadio label, .stCheckbox label, .stSelectbox label, .stMultiSelect label,
-textarea, input, span {
+/* Labels for questions */
+label, .stRadio label, .stCheckbox label {
     color: white !important;
     font-weight: 500 !important;
 }
 
-/* Enforce white text for all option labels (radio + checkbox), even on mobile */
-div[data-baseweb="radio"] label span,
-div[data-baseweb="checkbox"] label span,
-div[data-baseweb="radio"] div span,
-div[data-baseweb="checkbox"] div span {
+/* Bulletproof fix for radio/checkbox option text (deeply nested spans) */
+[data-baseweb="radio"] span,
+[data-baseweb="radio"] div span,
+[data-baseweb="checkbox"] span,
+[data-baseweb="checkbox"] div span {
     color: white !important;
     font-weight: 500 !important;
 }
 
-/* Optional: border enhancement on images */
+/* Optional: improve dropdown text color */
+.css-1wa3eu0-placeholder, .css-1uccc91-singleValue {
+    color: white !important;
+}
+
+/* Optional: image border styling */
 img {
     border: 2px solid white;
     border-radius: 8px;
     box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.4);
 }
 </style>
-
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
 # === Logo Setup ===
 logo_path = "logo.png"
