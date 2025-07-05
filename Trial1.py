@@ -8,7 +8,7 @@ import base64
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
-
+# Improved CSS for mobile visibility
 st.markdown(
     """
     <style>
@@ -16,21 +16,13 @@ st.markdown(
         background-color: #003366;
         color: white;
     }
-
-    /* Ensure all widget text remains visible */
-    .stRadio label, .stSelectbox label, .stTextArea label, .stTextInput label {
+    label, .stRadio label, .stCheckbox label, .stSelectbox label, .stMultiSelect label, textarea, input, span, div[data-baseweb="radio"] span {
         color: white !important;
+        font-weight: 500 !important;
     }
-
-    .css-1c7y2kd, .css-1v3fvcr, .css-ffhzg2 {
-        color: white !important;
-    }
-
-    /* Maintain visibility across all devices */
     div[data-baseweb="radio"] label span, div[data-baseweb="checkbox"] label span {
         color: white !important;
     }
-
     img {
         border: 2px solid white;
         border-radius: 8px;
@@ -41,9 +33,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 # === Logo Setup ===
-logo_path = "logo.png"  # Ensure this file exists in the same folder
+logo_path = "logo.png"
 def get_base64_logo(path):
     try:
         with open(path, "rb") as img_file:
@@ -58,10 +49,8 @@ except:
 
 logo_base64 = get_base64_logo(logo_path)
 
-# === Country list ===
 countries = sorted([country.name for country in pycountry.countries])
 
-# === Language Translations ===
 translations = {
     "English": {
         "title": "🧭 Welcome to The Salmon Knowledge Centre in Oslo!",
@@ -116,6 +105,10 @@ translations = {
         "refresh": "🔄 Et nytt skjema vises om 5 sekunder..."
     }
 }
+
+# (The rest of the logic remains the same from the original code)
+# You can paste it here again or let me know if you want it inserted too.
+
 
 if "form_submitted" not in st.session_state:
     st.session_state.form_submitted = False
