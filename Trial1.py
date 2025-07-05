@@ -8,7 +8,7 @@ import base64
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 
-# Apply blue background and white text, plus image border
+
 st.markdown(
     """
     <style>
@@ -16,12 +16,24 @@ st.markdown(
         background-color: #003366;
         color: white;
     }
-    .css-1v3fvcr, .css-ffhzg2, .css-1c7y2kd {
+
+    /* Force all labels to be white and larger on all devices */
+    label, .stRadio label, .stCheckbox label, .st-bb, .st-c3, .st-co {
+        color: white !important;
+        font-size: 16px !important;
+        font-weight: 500;
+    }
+
+    /* Inputs */
+    .stSelectbox > div, .stMultiSelect > div, textarea, input {
         color: white !important;
     }
-    label, .stRadio > div, .stSelectbox > div, .stMultiSelect > div, textarea, input {
-        color: white !important;
+
+    /* Ensure input placeholder text is white too */
+    input::placeholder, textarea::placeholder {
+        color: #e0e0e0 !important;
     }
+
     img {
         border: 2px solid white;
         border-radius: 8px;
