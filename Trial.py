@@ -263,7 +263,7 @@ if submit:
         csv_file = save_temp_csv(response_data)
         
         # Step 2: Upload to Drive
-        upload_to_drive(csv_file, folder_id="https://drive.google.com/drive/folders/1XcbXKHjJHH-kKyPQEKMfujXikpiuA_my")
+        upload_to_drive(csv_file, folder_id="1XcbXKHjJHH-kKyPQEKMfujXikpiuA_my")
         
         st.session_state.form_submitted = True
         st.rerun()
