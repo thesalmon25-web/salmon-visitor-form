@@ -79,7 +79,7 @@ translations = {
         "refresh": "🔄 A new form will appear in 5 seconds..."
     },
     "Norsk": {
-        "title": "🧭 Velkommen til The Salmon Kunnskapssenter i Oslo!",
+        "title": "🧭Velkommen til The Salmon Kunnskapssenter i Oslo!",
         "subheader": "Vennligst svar på noen spørsmål",
         "country": "Hvilket land kommer du fra?",
         "info_source": "Hvordan hørte du om oss?",
