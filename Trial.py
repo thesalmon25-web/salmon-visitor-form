@@ -8,50 +8,48 @@ import base64
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 # Improved CSS for visibility
+# Improved CSS for select box visibility
 st.markdown(
     """
     <style>
+    /* Base styling */
     body, .stApp {
         background-color: #003366;
-        color: white;
     }
-    /* General text styling */
-    h1, h2, h3, h4, h5, h6, p, div, span {
-        color: white !important;
+    
+    /* Select box container */
+    [data-baseweb="select"] {
+        background-color: white !important;
+        border-radius: 4px !important;
     }
-    /* Form labels */
-    .stTextLabel, .stRadio > label, .stCheckbox > label, .stSelectbox > label, .stMultiSelect > label {
-        color: white !important;
-        font-weight: 500 !important;
-    }
-    /* Radio and checkbox options */
-    .stRadio [role="radiogroup"] label span, 
-    .stCheckbox [role="checkbox"] label span,
-    .stSelectbox [role="combobox"] {
-        color: white !important;
-    }
-    /* Selected items */
-    [data-baseweb="select"] [aria-selected="true"] {
+    
+    /* Selected value in dropdown */
+    [data-baseweb="select"] > div:first-child {
         color: black !important;
     }
+    
     /* Dropdown options */
     [role="listbox"] li {
         color: black !important;
-    }
-    /* Text input */
-    .stTextInput input, .stTextArea textarea {
-        color: black !important;
         background-color: white !important;
     }
-    img {
-        border: 2px solid white;
-        border-radius: 8px;
-        box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.4);
+    
+    /* Dropdown arrow */
+    [data-baseweb="select"] svg {
+        fill: black !important;
     }
+    
+    /* All other text elements */
+    h1, h2, h3, h4, h5, h6, p, div, span, label {
+        color: white !important;
+    }
+    
+    /* Keep your existing other styles here... */
     </style>
     """,
     unsafe_allow_html=True
 )
+
 logo_path = "logo.png"
 def get_base64_logo(path):
     try:
