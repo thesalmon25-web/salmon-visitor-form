@@ -4,6 +4,10 @@ import pandas as pd
 from datetime import datetime
 import os
 from PIL import Image
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+import tempfile
 import base64
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
@@ -214,11 +218,62 @@ if not st.session_state.form_submitted:
             # Add text response
             response["improvement"] = improvement
             
-            # Save to CSV
-            file_exists = os.path.isfile("visitor_data.csv")
-            df = pd.DataFrame([response])
-            df.to_csv("visitor_data.csv", mode='a', header=not file_exists, index=False)
-            
+            # 1. Create a temporary CSV file
+def save_temp_csv(data):
+    df = pd.DataFrame([data])
+    temp_dir = tempfile.mkdtemp()
+    csv_path = os.path.join(temp_dir, "visitor_data.csv")
+    df.to_csv(csv_path, index=False)
+    return csv_path
+
+# 2. Upload to Google Drive (modified for free access)
+def upload_to_drive(file_path, folder_id=None):
+    # Use Streamlit secrets for credentials
+    creds = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"],
+        scopes=["https://www.googleapis.com/auth/drive.file"]
+    )
+    
+    drive_service = build("drive", "v3", credentials=creds)
+    
+    file_metadata = {
+        "name": os.path.basename(file_path),
+        "parents": [folder_id] if folder_id else []
+    }
+    
+    media = MediaFileUpload(file_path, mimetype="text/csv")
+    file = drive_service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields="id"
+    ).execute()
+    
+    return file.get("id")
+
+# In your submission logic:
+if submit:
+    response_data = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "country": country,
+        # ... (all other fields)
+    }
+    
+    try:
+        # Step 1: Create temp CSV
+        csv_file = save_temp_csv(response_data)
+        
+        # Step 2: Upload to Drive
+        upload_to_drive(csv_file, folder_id="YOUR_DRIVE_FOLDER_ID")
+        
+        st.session_state.form_submitted = True
+        st.rerun()
+        
+    except Exception as e:
+        st.error(f"Error saving to Drive: {str(e)}")
+    finally:
+        if os.path.exists(csv_file):
+            os.remove(csv_file)  # Clean up
+
             st.session_state.form_submitted = True
             st.rerun()
 else:
