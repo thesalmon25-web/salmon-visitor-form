@@ -9,23 +9,25 @@ import base64
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
 # Improved CSS for visibility
 # Improved CSS for select box visibility
+# Complete visibility fix CSS
 st.markdown(
     """
     <style>
-    /* Base styling */
-    body, .stApp {
+    /* Base app styling */
+    .stApp {
         background-color: #003366;
     }
     
+    /* ===== COUNTRY DROPDOWN FIXES ===== */
     /* Select box container */
     [data-baseweb="select"] {
         background-color: white !important;
-        border-radius: 4px !important;
     }
     
-    /* Selected value in dropdown */
-    [data-baseweb="select"] > div:first-child {
+    /* Selected value display */
+    [data-baseweb="select"] > div:first-child > div {
         color: black !important;
+        background-color: white !important;
     }
     
     /* Dropdown options */
@@ -39,12 +41,45 @@ st.markdown(
         fill: black !important;
     }
     
-    /* All other text elements */
+    /* ===== SUBMIT BUTTON FIXES ===== */
+    /* Button container */
+    .stButton > button {
+        background-color: #4CAF50 !important;
+        color: white !important;
+        border: none !important;
+        font-weight: bold !important;
+    }
+    
+    /* Button hover state */
+    .stButton > button:hover {
+        background-color: #45a049 !important;
+        color: white !important;
+    }
+    
+    /* ===== GENERAL TEXT VISIBILITY ===== */
+    /* All text elements */
     h1, h2, h3, h4, h5, h6, p, div, span, label {
         color: white !important;
     }
     
-    /* Keep your existing other styles here... */
+    /* Form labels */
+    .stTextLabel, .stRadio > label, .stCheckbox > label, 
+    .stSelectbox > label, .stMultiSelect > label {
+        color: white !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Radio and checkbox options */
+    .stRadio [role="radiogroup"] label span, 
+    .stCheckbox [role="checkbox"] label span {
+        color: white !important;
+    }
+    
+    /* Text inputs */
+    .stTextInput input, .stTextArea textarea {
+        color: black !important;
+        background-color: white !important;
+    }
     </style>
     """,
     unsafe_allow_html=True
