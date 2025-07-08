@@ -7,45 +7,51 @@ from PIL import Image
 import base64
 
 st.set_page_config(page_title="Salmon Visitor Info", layout="centered")
-
-# Improved CSS for mobile visibility and answer option coloring
-st.markdown("""
-<style>
-body, .stApp {
-    background-color: #003366;
-    color: white;
-}
-
-/* Labels for questions */
-label, .stRadio label, .stCheckbox label {
-    color: white !important;
-    font-weight: 500 !important;
-}
-
-/* Bulletproof fix for radio/checkbox option text (deeply nested spans) */
-[data-baseweb="radio"] span,
-[data-baseweb="radio"] div span,
-[data-baseweb="checkbox"] span,
-[data-baseweb="checkbox"] div span {
-    color: white !important;
-    font-weight: 500 !important;
-}
-
-/* Optional: improve dropdown text color */
-.css-1wa3eu0-placeholder, .css-1uccc91-singleValue {
-    color: white !important;
-}
-
-/* Optional: image border styling */
-img {
-    border: 2px solid white;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.4);
-}
-</style>
-""", unsafe_allow_html=True)
-
-# === Logo Setup ===
+# Improved CSS for visibility
+st.markdown(
+    """
+    <style>
+    body, .stApp {
+        background-color: #003366;
+        color: white;
+    }
+    /* General text styling */
+    h1, h2, h3, h4, h5, h6, p, div, span {
+        color: white !important;
+    }
+    /* Form labels */
+    .stTextLabel, .stRadio > label, .stCheckbox > label, .stSelectbox > label, .stMultiSelect > label {
+        color: white !important;
+        font-weight: 500 !important;
+    }
+    /* Radio and checkbox options */
+    .stRadio [role="radiogroup"] label span, 
+    .stCheckbox [role="checkbox"] label span,
+    .stSelectbox [role="combobox"] {
+        color: white !important;
+    }
+    /* Selected items */
+    [data-baseweb="select"] [aria-selected="true"] {
+        color: black !important;
+    }
+    /* Dropdown options */
+    [role="listbox"] li {
+        color: black !important;
+    }
+    /* Text input */
+    .stTextInput input, .stTextArea textarea {
+        color: black !important;
+        background-color: white !important;
+    }
+    img {
+        border: 2px solid white;
+        border-radius: 8px;
+        box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.4);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 logo_path = "logo.png"
 def get_base64_logo(path):
     try:
@@ -60,6 +66,7 @@ except:
     logo = None
 
 logo_base64 = get_base64_logo(logo_path)
+
 countries = sorted([country.name for country in pycountry.countries])
 
 translations = {
@@ -90,7 +97,7 @@ translations = {
         "refresh": "🔄 A new form will appear in 5 seconds..."
     },
     "Norsk": {
-        "title": "🧭 Velkommen til The Salmon Kunnskapssenter i Oslo!",
+        "title": "🧭Velkommen til The Salmon Kunnskapssenter i Oslo!",
         "subheader": "Vennligst svar på noen spørsmål",
         "country": "Hvilket land kommer du fra?",
         "info_source": "Hvordan hørte du om oss?",
@@ -116,6 +123,10 @@ translations = {
         "refresh": "🔄 Et nytt skjema vises om 5 sekunder..."
     }
 }
+
+# (The rest of the logic remains the same from the original code)
+# You can paste it here again or let me know if you want it inserted too.
+
 
 if "form_submitted" not in st.session_state:
     st.session_state.form_submitted = False
@@ -192,4 +203,6 @@ else:
     st.markdown(f"### {t['enjoy']}")
     if logo_base64:
         st.markdown(f"<img src='data:image/png;base64,{logo_base64}' width='120'/>", unsafe_allow_html=True)
-    st.markdown(f"<meta http-equiv='refresh' content='5'>", unsafe_allow_html=True)
+    st.markdown("""
+        <meta http-equiv="refresh" content="5">
+    """, unsafe_allow_html=True)
