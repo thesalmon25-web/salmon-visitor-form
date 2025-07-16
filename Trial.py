@@ -88,7 +88,7 @@ translations = {
 
 def submit_to_google_form(response, lang):
     if lang == "English":
-        form_url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdDL9fd4XMimQfY24hSk93Nbn7nPhdKmGmwFwJmehfEV_A01w/formResponse"
+        form_url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdGjIQZVZ7V2xPATUwabaDgfWoF0sHPXs65sHAIXXfUdXx5Sg/formResponse"
         field_map = {
             "country": "entry.873859373",
             "info_source": "entry.41075558",
@@ -103,7 +103,7 @@ def submit_to_google_form(response, lang):
             "improvement": "entry.1731226948"
         }
     else:
-        form_url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf3tu1dxqnLZyf4p-dFYBMbcNftwH5tLSPDMRKj-q6AYLaVTw/formResponse"
+        form_url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfpLE3aHuTblklLGOJHSJXrpwOU31ug3VbExJ545c8STKUpTQ/formResponse"
         field_map = {
             "country": "entry.1492465706",
             "info_source": "entry.732089430",
