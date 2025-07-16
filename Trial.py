@@ -144,7 +144,7 @@ def submit_to_google_form(response, lang):
             data.append((key, value))
 
     response_req = requests.post(form_url, data=data)
-    return response_req.status_code == 200
+    return response_req.status_code in [200, 302, 303]
 
 if "form_submitted" not in st.session_state:
     st.session_state.form_submitted = False
