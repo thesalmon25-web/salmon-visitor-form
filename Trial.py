@@ -103,7 +103,7 @@ def submit_to_google_form(response, lang):
             "improvement": "entry.1731226948"
         }
     else:
-        form_url = "https://docs.google.com/forms/d/e/1FAIpQLSf3tu1dxqnLZyf4p-dFYBMbcNftwH5tLSPDMRKj-q6AYLaVTw/formResponse"
+        form_url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSf3tu1dxqnLZyf4p-dFYBMbcNftwH5tLSPDMRKj-q6AYLaVTw/formResponse"
         field_map = {
             "country": "entry.1492465706",
             "info_source": "entry.732089430",
